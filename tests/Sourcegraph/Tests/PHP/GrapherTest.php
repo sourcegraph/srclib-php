@@ -7,13 +7,11 @@ use Sourcegraph\PHP\Grapher;
 
 class GrapherTest extends TestCase
 {
-    public function testAnalyzer()
+    public function testRun()
     {
-        $code = $this->loadFixture('001.namespaces.php');
+        $filename = $this->getFixtureFullPath('003.constants.php');
 
-        $grapher = new Grapher();
-        $result = $grapher->run($code);
-
-        print_r($result);
+        $grapher = new Grapher(BASE_PATH);
+        $result = $grapher->run($filename);
     }
 }

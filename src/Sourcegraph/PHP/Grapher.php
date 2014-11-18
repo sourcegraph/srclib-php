@@ -14,13 +14,22 @@ use Sourcegraph\PHP\Grapher;
 
 class Grapher
 {
+    const KIND_CLASS = 'class';
+    const KIND_ASSIGN = 'assign';
+    const KIND_FUNCTION = 'function';
+    const KIND_METHOD = 'method';
+    const KIND_CONSTANT = 'constant';
+
+    private $projectPath;
     private $parser;
     private $traverser;
     private $nodeCollector;
     private $defExtractor;
 
-    public function __construct()
+    public function __construct($projectPath)
     {
+        $this->projectPath = realpath($projectPath);
+
         $this->setUpParser();
         $this->setUpTraverser();
         $this->setUpExtractors();
@@ -45,18 +54,31 @@ class Grapher
         $this->defExtractor = new Grapher\DefExtractor();
     }
 
-    protected function parse($code)
+    protected function parse($filename)
     {
-        $stmts = $this->parser->parse($code);
+        $stmts = $this->parser->parse($this->readFile($filename));
         $this->traverser->traverse($stmts);
 
         return $this->nodeCollector->getNodes();
     }
 
-    public function run($code)
+    private function readFile($filename)
     {
-        $nodes = $this->parse($code);
+        return file_get_contents($filename);
+    }
 
-        return ['defs' => $this->defExtractor->extract($nodes)];
+    public function run($filename)
+    {
+        $nodes = $this->parse($filename);
+        $filename = $this->getRelativeFilename($filename);
+
+        return ['defs' => $this->defExtractor->extract($filename, $nodes)];
+    }
+
+    private function getRelativeFilename($filename)
+    {
+        $filename = realpath($filename);
+
+        return str_replace($this->projectPath, '', $filename);
     }
 }

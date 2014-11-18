@@ -17,7 +17,22 @@ class NodeCollector extends NodeVisitorAbstract
 
     public function enterNode(Node $node)
     {
+        $this->setNamespaceToMethods($node);
         $this->nodes[] = $node;
+    }
+
+    private function setNamespaceToMethods(Node $node)
+    {
+        if (!$node instanceof Node\Stmt\Class_) {
+            return false;
+        }
+
+        foreach ($node->stmts as $method) {
+            $ns = clone $node->namespacedName;
+
+            $ns->append($method->name);
+            $method->namespacedName = $ns;
+        }
     }
 
     public function getNodes()
