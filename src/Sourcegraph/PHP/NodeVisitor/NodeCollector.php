@@ -22,7 +22,11 @@ class NodeCollector extends NodeVisitorAbstract
 
     private function setNamespaceAtClasses(Node $node)
     {
-        if (!$node instanceof Node\Stmt\Class_) {
+        if (
+            !$node instanceof Node\Stmt\Class_ &&
+            !$node instanceof Node\Stmt\Trait_ &&
+            !$node instanceof Node\Stmt\Interface_
+        ) {
             return false;
         }
 

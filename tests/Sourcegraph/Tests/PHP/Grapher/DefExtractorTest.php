@@ -152,6 +152,48 @@ class DefExtractorTest extends TestCase
                     'DefEnd' => 146,
                 ]
             ]],
+            ['005.traits.php', [
+                [
+                    'Kind' => 'trait',
+                    'Name' => 'Qux',
+                    'TreePath' => 'Foo/Qux',
+                    'File' => '005.traits.php',
+                    'Test' => false,
+                    'DefStart' => 27,
+                    'DefEnd' => 77,
+                    'Exported' => true,
+                ], [
+                    'Kind' => 'method',
+                    'Name' => 'Bar',
+                    'TreePath' => 'Foo/Qux/Bar',
+                    'Exported' => true,
+                    'File' => '005.traits.php',
+                    'Test' => false,
+                    'DefStart' => 47,
+                    'DefEnd' => 71,
+                ]
+            ]],
+            ['006.interfaces.php', [
+                [
+                    'Kind' => 'interface',
+                    'Name' => 'Qux',
+                    'TreePath' => 'Foo/Qux',
+                    'File' => '006.interfaces.php',
+                    'Test' => false,
+                    'DefStart' => 27,
+                    'DefEnd' => 92,
+                    'Exported' => true,
+                ], [
+                    'Kind' => 'method',
+                    'Name' => 'publicMethod',
+                    'TreePath' => 'Foo/Qux/publicMethod',
+                    'Exported' => true,
+                    'File' => '006.interfaces.php',
+                    'Test' => false,
+                    'DefStart' => 55,
+                    'DefEnd' => 86,
+                ]
+            ]],
         ];
     }
 }

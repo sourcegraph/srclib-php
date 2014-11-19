@@ -30,6 +30,12 @@ class DefExtractor
             case $node instanceof Stmt\Class_:
                 $def = $this->extractStmtClass($node);
                 break;
+            case $node instanceof Stmt\Trait_:
+                $def = $this->extractStmtTrait($node);
+                break;
+            case $node instanceof Stmt\Interface_:
+                $def = $this->extractStmtInterface($node);
+                break;
             case $node instanceof Stmt\Function_:
                 $def = $this->extractStmtFunction($node);
                 break;
@@ -72,6 +78,25 @@ class DefExtractor
             'TreePath' => $node->namespacedName->toString('/'),
         ];
     }
+
+    protected function extractStmtTrait(Stmt\Trait_ $node)
+    {
+        return [
+            'Kind' => Grapher::KIND_TRAIT,
+            'Name' => $node->name,
+            'TreePath' => $node->namespacedName->toString('/'),
+        ];
+    }
+
+    protected function extractStmtInterface(Stmt\Interface_ $node)
+    {
+        return [
+            'Kind' => Grapher::KIND_INTERFACE,
+            'Name' => $node->name,
+            'TreePath' => $node->namespacedName->toString('/'),
+        ];
+    }
+
 
     protected function extractStmtFunction(Stmt\Function_ $node)
     {
