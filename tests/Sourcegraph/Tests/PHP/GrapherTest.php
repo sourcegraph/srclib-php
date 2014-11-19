@@ -9,7 +9,7 @@ class GrapherTest extends TestCase
 {
     public function testRun()
     {
-        $filename = $this->getFixtureFullPath('010.complex.php');
+        $filename = $this->getFixtureFullPath('500.complex.php');
 
         $grapher = new Grapher(BASE_PATH);
         $result = $grapher->run($filename);
