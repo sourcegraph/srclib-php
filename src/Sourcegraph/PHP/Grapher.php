@@ -27,7 +27,7 @@ class Grapher
     private $parser;
     private $traverser;
     private $nodeCollector;
-    private $defExtractor;
+    private $extractors;
 
     public function __construct($projectPath)
     {
@@ -54,8 +54,8 @@ class Grapher
 
     protected function setUpExtractors()
     {
-        $this->defExtractor = new Grapher\DefExtractor();
-        $this->docExtractor = new Grapher\DocExtractor();
+        $this->extractors['defs'] = new Grapher\DefExtractor();
+        $this->extractors['docs'] = new Grapher\DocExtractor();
     }
 
     protected function parse($filename)
@@ -73,13 +73,15 @@ class Grapher
 
     public function run($filename)
     {
+        $relativeFile = $this->getRelativeFilename($filename);
         $nodes = $this->parse($filename);
-        $filename = $this->getRelativeFilename($filename);
 
-        return [
-            'defs' => $this->defExtractor->extract($filename, $nodes),
-            'docs' => $this->docExtractor->extract($filename, $nodes),
-        ];
+        $result = [];
+        foreach ($this->extractors as $key => $extractor) {
+            $result[$key] = $extractor->extract($relativeFile, $nodes);
+        }
+
+        return $result;
     }
 
     private function getRelativeFilename($filename)
