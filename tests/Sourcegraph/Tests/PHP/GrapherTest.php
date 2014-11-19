@@ -9,9 +9,11 @@ class GrapherTest extends TestCase
 {
     public function testRun()
     {
-        $filename = $this->getFixtureFullPath('003.constants.php');
+        $filename = $this->getFixtureFullPath('010.complex.php');
 
         $grapher = new Grapher(BASE_PATH);
         $result = $grapher->run($filename);
+
+        //echo json_encode($result, JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);
     }
 }

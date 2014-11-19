@@ -55,6 +55,7 @@ class Grapher
     protected function setUpExtractors()
     {
         $this->defExtractor = new Grapher\DefExtractor();
+        $this->docExtractor = new Grapher\DocExtractor();
     }
 
     protected function parse($filename)
@@ -75,7 +76,10 @@ class Grapher
         $nodes = $this->parse($filename);
         $filename = $this->getRelativeFilename($filename);
 
-        return ['defs' => $this->defExtractor->extract($filename, $nodes)];
+        return [
+            'defs' => $this->defExtractor->extract($filename, $nodes),
+            'docs' => $this->docExtractor->extract($filename, $nodes),
+        ];
     }
 
     private function getRelativeFilename($filename)

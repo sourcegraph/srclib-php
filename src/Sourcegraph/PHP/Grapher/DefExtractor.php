@@ -13,7 +13,7 @@ class DefExtractor
     {
         $defs = [];
         foreach ($nodes as $node) {
-            if ($def = $this->processNode($node, $filename, $test)) {
+            if ($def = $this->buildDef($node, $filename, $test)) {
                 $defs[] = $def;
             }
         }
@@ -21,12 +21,9 @@ class DefExtractor
         return $defs;
     }
 
-    private function processNode(Node $node, $filename, $test)
+    private function buildDef(Node $node, $filename, $test)
     {
         switch (true) {
-            case $node instanceof Expr\Assign:
-                $def = $this->extractExprAssign($node);
-                break;
             case $node instanceof Stmt\Class_:
                 $def = $this->extractStmtClass($node);
                 break;
@@ -60,14 +57,6 @@ class DefExtractor
         }
 
         return $def;
-    }
-
-    protected function extractExprAssign(Expr\Assign $node)
-    {
-        return [
-            'Kind' => Grapher::KIND_ASSIGN,
-            'Name' => $node->var->name
-        ];
     }
 
     protected function extractStmtClass(Stmt\Class_ $node)

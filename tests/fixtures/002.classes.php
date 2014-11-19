@@ -1,6 +1,7 @@
 <?php
 
 namespace Foo {
+    /* doc */
     class Bar extends Foo
     {
         public function __construct() {}

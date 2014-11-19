@@ -5,6 +5,7 @@ namespace Foo {
     {
         public $publicProperty;
         private $privateProperty;
+        /* doc */
         protected $protectedProperty;
     }
 }

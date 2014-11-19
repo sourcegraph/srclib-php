@@ -31,8 +31,8 @@ class DefExtractorTest extends TestCase
                     'Exported' => true,
                     'File' => '001.functions.php',
                     'Test' => false,
-                    'DefStart' => 27,
-                    'DefEnd' => 44,
+                    'DefStart' => 64,
+                    'DefEnd' => 81,
                 ]
             ]],
             ['002.classes.php', [
@@ -43,8 +43,8 @@ class DefExtractorTest extends TestCase
                     'Exported' => true,
                     'File' => '002.classes.php',
                     'Test' => false,
-                    'DefStart' => 27,
-                    'DefEnd' => 193,
+                    'DefStart' => 41,
+                    'DefEnd' => 207,
                 ], [
                     'Kind' => 'method',
                     'Name' => '__construct',
@@ -52,8 +52,8 @@ class DefExtractorTest extends TestCase
                     'Exported' => true,
                     'File' => '002.classes.php',
                     'Test' => false,
-                    'DefStart' => 63,
-                    'DefEnd' => 95,
+                    'DefStart' => 77,
+                    'DefEnd' => 109,
                 ], [
                     'Kind' => 'method',
                     'Name' => 'protectedMethod',
@@ -61,8 +61,8 @@ class DefExtractorTest extends TestCase
                     'Exported' => false,
                     'File' => '002.classes.php',
                     'Test' => false,
-                    'DefStart' => 104,
-                    'DefEnd' => 143,
+                    'DefStart' => 118,
+                    'DefEnd' => 157,
                 ], [
                     'Kind' => 'method',
                     'Name' => 'privateMethod',
@@ -70,8 +70,8 @@ class DefExtractorTest extends TestCase
                     'Exported' => false,
                     'File' => '002.classes.php',
                     'Test' => false,
-                    'DefStart' => 152,
-                    'DefEnd' => 187,
+                    'DefStart' => 166,
+                    'DefEnd' => 201,
                 ], [
                     'Kind' => 'class',
                     'Name' => 'Foo',
@@ -79,8 +79,8 @@ class DefExtractorTest extends TestCase
                     'Exported' => true,
                     'File' => '002.classes.php',
                     'Test' => false,
-                    'DefStart' => 199,
-                    'DefEnd' => 264,
+                    'DefStart' => 213,
+                    'DefEnd' => 278,
                 ], [
                     'Kind' => 'method',
                     'Name' => 'extendedMethod',
@@ -88,8 +88,8 @@ class DefExtractorTest extends TestCase
                     'Exported' => true,
                     'File' => '002.classes.php',
                     'Test' => false,
-                    'DefStart' => 223,
-                    'DefEnd' => 258,
+                    'DefStart' => 237,
+                    'DefEnd' => 272,
                 ]
             ]],
             ['003.constants.php', [
@@ -99,8 +99,8 @@ class DefExtractorTest extends TestCase
                     'TreePath' => 'Foo/QUX',
                     'File' => '003.constants.php',
                     'Test' => false,
-                    'DefStart' => 27,
-                    'DefEnd' => 46,
+                    'DefStart' => 41,
+                    'DefEnd' => 60,
                     'Exported' => true,
                 ], [
                     'Kind' => 'constant',
@@ -108,8 +108,8 @@ class DefExtractorTest extends TestCase
                     //'TreePath' => 'Foo/QUX', TODO: extract TreePath from define
                     'File' => '003.constants.php',
                     'Test' => false,
-                    'DefStart' => 51,
-                    'DefEnd' => 71,
+                    'DefStart' => 80,
+                    'DefEnd' => 100,
                     'Exported' => true,
                 ]
             ]],
@@ -121,7 +121,7 @@ class DefExtractorTest extends TestCase
                     'File' => '004.properties.php',
                     'Test' => false,
                     'DefStart' => 27,
-                    'DefEnd' => 152,
+                    'DefEnd' => 170,
                     'Exported' => true,
                 ], [
                     'Kind' => 'property',
@@ -148,8 +148,8 @@ class DefExtractorTest extends TestCase
                     'Exported' => false,
                     'File' => '004.properties.php',
                     'Test' => false,
-                    'DefStart' => 117,
-                    'DefEnd' => 146,
+                    'DefStart' => 135,
+                    'DefEnd' => 164,
                 ]
             ]],
             ['005.traits.php', [
@@ -159,8 +159,8 @@ class DefExtractorTest extends TestCase
                     'TreePath' => 'Foo/Qux',
                     'File' => '005.traits.php',
                     'Test' => false,
-                    'DefStart' => 27,
-                    'DefEnd' => 77,
+                    'DefStart' => 41,
+                    'DefEnd' => 91,
                     'Exported' => true,
                 ], [
                     'Kind' => 'method',
@@ -169,8 +169,8 @@ class DefExtractorTest extends TestCase
                     'Exported' => true,
                     'File' => '005.traits.php',
                     'Test' => false,
-                    'DefStart' => 47,
-                    'DefEnd' => 71,
+                    'DefStart' => 61,
+                    'DefEnd' => 85,
                 ]
             ]],
             ['006.interfaces.php', [
@@ -180,8 +180,8 @@ class DefExtractorTest extends TestCase
                     'TreePath' => 'Foo/Qux',
                     'File' => '006.interfaces.php',
                     'Test' => false,
-                    'DefStart' => 27,
-                    'DefEnd' => 92,
+                    'DefStart' => 41,
+                    'DefEnd' => 129,
                     'Exported' => true,
                 ], [
                     'Kind' => 'method',
@@ -190,8 +190,8 @@ class DefExtractorTest extends TestCase
                     'Exported' => true,
                     'File' => '006.interfaces.php',
                     'Test' => false,
-                    'DefStart' => 55,
-                    'DefEnd' => 86,
+                    'DefStart' => 92,
+                    'DefEnd' => 123,
                 ]
             ]],
         ];

@@ -1,7 +1,10 @@
 <?php
 
 namespace Foo {
+    /* doc */
     const QUX = 'test';
+
+    /* doc */
     define('BAR', 'bar');
 }
 
