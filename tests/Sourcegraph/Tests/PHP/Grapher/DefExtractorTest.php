@@ -16,6 +16,7 @@ class DefExtractorTest extends TestCase
 
         $extractor = new DefExtractor();
         $result = $extractor->extract($filename, $nodes);
+
         $this->assertEquals($result, $expected);
     }
 
@@ -110,6 +111,45 @@ class DefExtractorTest extends TestCase
                     'DefStart' => 51,
                     'DefEnd' => 71,
                     'Exported' => true,
+                ]
+            ]],
+            ['004.properties.php', [
+                [
+                    'Kind' => 'class',
+                    'Name' => 'Bar',
+                    'TreePath' => 'Foo/Bar',
+                    'File' => '004.properties.php',
+                    'Test' => false,
+                    'DefStart' => 27,
+                    'DefEnd' => 152,
+                    'Exported' => true,
+                ], [
+                    'Kind' => 'property',
+                    'Name' => 'publicProperty',
+                    'TreePath' => 'Foo/Bar/publicProperty',
+                    'Exported' => true,
+                    'File' => '004.properties.php',
+                    'Test' => false,
+                    'DefStart' => 51,
+                    'DefEnd' => 74,
+                ], [
+                    'Kind' => 'property',
+                    'Name' => 'privateProperty',
+                    'TreePath' => 'Foo/Bar/privateProperty',
+                    'Exported' => false,
+                    'File' => '004.properties.php',
+                    'Test' => false,
+                    'DefStart' => 83,
+                    'DefEnd' => 108,
+                ], [
+                    'Kind' => 'property',
+                    'Name' => 'protectedProperty',
+                    'TreePath' => 'Foo/Bar/protectedProperty',
+                    'Exported' => false,
+                    'File' => '004.properties.php',
+                    'Test' => false,
+                    'DefStart' => 117,
+                    'DefEnd' => 146,
                 ]
             ]],
         ];

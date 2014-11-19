@@ -36,6 +36,9 @@ class DefExtractor
             case $node instanceof Stmt\ClassMethod:
                 $def = $this->extractStmtClassMethod($node);
                 break;
+            case $node instanceof Stmt\Property:
+                $def = $this->extractStmtProperty($node);
+                break;
             case $node instanceof Stmt\Const_:
                 $def = $this->extractStmtConst($node);
                 break;
@@ -86,6 +89,16 @@ class DefExtractor
             'Name' => $node->name,
             'TreePath' => $node->namespacedName->toString('/'),
             'Exported' => $node->isPublic()
+        ];
+    }
+
+    protected function extractStmtProperty(Stmt\Property $node)
+    {
+        return [
+            'Kind' => Grapher::KIND_PROPERTY,
+            'Name' => $node->props[0]->name,
+            'TreePath' => $node->namespacedName->toString('/'),
+            'Exported' => $node->type == Stmt\Class_::MODIFIER_PUBLIC
         ];
     }
 

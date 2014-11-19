@@ -19,6 +19,7 @@ class Grapher
     const KIND_FUNCTION = 'function';
     const KIND_METHOD = 'method';
     const KIND_CONSTANT = 'constant';
+    const KIND_PROPERTY = 'property';
 
     private $projectPath;
     private $parser;
