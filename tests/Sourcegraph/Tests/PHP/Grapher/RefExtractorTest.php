@@ -34,6 +34,11 @@ class RefExtractorTest extends TestCase
                     'Start' => 140,
                     'End' => 150,
                 ], [
+                    'DefPath' => 'BAZ',
+                    'File' => '101.params.php',
+                    'Start' => 147,
+                    'End' => 150,
+                ], [
                     'DefPath' => 'Foo/Qux',
                     'File' => '101.params.php',
                     'Start' => 178,
@@ -52,6 +57,11 @@ class RefExtractorTest extends TestCase
                     'DefPath' => 'Foo/Qux/QUX',
                     'File' => '101.params.php',
                     'Start' => 326,
+                    'End' => 341,
+                ], [
+                    'DefPath' => 'Foo/Qux/QUX',
+                    'File' => '101.params.php',
+                    'Start' => 333,
                     'End' => 341,
                 ]
             ]],
@@ -108,14 +118,29 @@ class RefExtractorTest extends TestCase
                     'Start' => 118,
                     'End' => 139,
                 ], [
+                    'DefPath' => 'Foo/Baz',
+                    'File' => '104.asigns.php',
+                    'Start' => 125,
+                    'End' => 139,
+                ], [
                     'DefPath' => 'Baz/Baz/BAR',
                     'File' => '104.asigns.php',
                     'Start' => 145,
                     'End' => 160,
                 ], [
+                    'DefPath' => 'Baz/Baz/BAR',
+                    'File' => '104.asigns.php',
+                    'Start' => 152,
+                    'End' => 160,
+                ], [
                     'DefPath' => 'FOO',
                     'File' => '104.asigns.php',
                     'Start' => 166,
+                    'End' => 176,
+                ], [
+                    'DefPath' => 'FOO',
+                    'File' => '104.asigns.php',
+                    'Start' => 173,
                     'End' => 176,
                 ]
             ]],

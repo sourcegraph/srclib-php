@@ -82,6 +82,15 @@ class RefExtractor
             case $node instanceof Stmt\Use_:
                 $ref = $this->extractStmtUse($node);
                 break;
+            case $node instanceof Expr\ConstFetch:
+                $ref = $this->extractExprConstFetch($node);
+                break;
+            case $node instanceof Expr\ClassConstFetch:
+                $ref = $this->extractExprClassConstFetch($node);
+                break;
+            case $node instanceof Expr\New_:
+                $ref = $this->extractExprNew($node);
+                break;
             case $node instanceof Expr\Assign:
                 $ref = $this->extractExprAssign($node);
                 break;
@@ -103,11 +112,11 @@ class RefExtractor
         }
 
         if ($node->default && $node->default instanceof Expr\ClassConstFetch) {
-            return $this->extractClassConstFetch($node->default);
+            return $this->extractExprClassConstFetch($node->default);
         }
 
         if ($node->default && $node->default instanceof Expr\ConstFetch) {
-            return $this->extractConstFetch($node->default);
+            return $this->extractExprConstFetch($node->default);
         }
     }
 
@@ -128,20 +137,20 @@ class RefExtractor
     protected function extractExprAssign(Expr\Assign $node)
     {
         if ($node->expr && $node->expr instanceof Expr\New_) {
-            return $this->extractNew($node->expr);
+            return $this->extractExprNew($node->expr);
         }
 
         if ($node->expr && $node->expr instanceof Expr\ConstFetch) {
-            return $this->extractConstFetch($node->expr);
+            return $this->extractExprConstFetch($node->expr);
         }
 
         if ($node->expr && $node->expr instanceof Expr\ClassConstFetch) {
-            return $this->extractClassConstFetch($node->expr);
+            return $this->extractExprClassConstFetch($node->expr);
         }
     }
 
 
-    protected function extractClassConstFetch(Expr\ClassConstFetch $node)
+    protected function extractExprClassConstFetch(Expr\ClassConstFetch $node)
     {
         $name = clone $node->class;
         $name->append($node->name);
@@ -151,14 +160,14 @@ class RefExtractor
         ];
     }
 
-    protected function extractConstFetch(Expr\ConstFetch $node)
+    protected function extractExprConstFetch(Expr\ConstFetch $node)
     {
         return [
             'DefPath' => $node->name->toString('/')
         ];
     }
 
-    protected function extractNew(Expr\New_ $node)
+    protected function extractExprNew(Expr\New_ $node)
     {
         return [
             'DefPath' => $node->class->toString('/')
