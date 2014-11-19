@@ -54,8 +54,9 @@ class Grapher
 
     protected function setUpExtractors()
     {
-        $this->extractors['defs'] = new Grapher\DefExtractor();
-        $this->extractors['docs'] = new Grapher\DocExtractor();
+        $this->extractors['Defs'] = new Grapher\DefExtractor();
+        $this->extractors['Docs'] = new Grapher\DocExtractor();
+        $this->extractors['Refs'] = new Grapher\RefExtractor();
     }
 
     protected function parse($filename)
