@@ -9,7 +9,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
 {
     protected function getFixtureFullPath($filename)
     {
-        return TEST_PATH . '/fixtures/' . $filename;
+        return TEST_PATH . '/fixtures/graph/' . $filename;
     }
 
     public function loadCodeFixture($filename)
