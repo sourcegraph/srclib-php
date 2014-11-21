@@ -41,28 +41,28 @@ class RefExtractorTest extends TestCase
                 ], [
                     'DefPath' => 'Foo/Qux',
                     'File' => '101.params.php',
-                    'Start' => 178,
-                    'End' => 190,
+                    'Start' => 190,
+                    'End' => 202,
                 ], [
                     'DefPath' => 'Foo/Bar',
                     'File' => '101.params.php',
-                    'Start' => 248,
-                    'End' => 261,
+                    'Start' => 260,
+                    'End' => 273,
                 ], [
                     'DefPath' => 'Foo/Qux',
                     'File' => '101.params.php',
-                    'Start' => 263,
-                    'End' => 271,
+                    'Start' => 275,
+                    'End' => 283,
                 ], [
                     'DefPath' => 'Foo/Qux/QUX',
                     'File' => '101.params.php',
-                    'Start' => 326,
-                    'End' => 341,
+                    'Start' => 338,
+                    'End' => 353,
                 ], [
                     'DefPath' => 'Foo/Qux/QUX',
                     'File' => '101.params.php',
-                    'Start' => 333,
-                    'End' => 341,
+                    'Start' => 345,
+                    'End' => 353,
                 ]
             ]],
             ['102.uses.php', [

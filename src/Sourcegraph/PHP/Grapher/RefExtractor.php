@@ -107,7 +107,7 @@ class RefExtractor
 
     protected function extractParam(Param $node)
     {
-        if ($node->type) {
+        if ($node->type && $node->type != 'array') {
             return $this->extractParamFromType($node);
         }
 
