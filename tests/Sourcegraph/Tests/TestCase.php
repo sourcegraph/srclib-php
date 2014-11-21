@@ -22,9 +22,16 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $filename = $this->getFixtureFullPath($filename);
         $grapher = new Grapher(BASE_PATH);
 
-        $method = new ReflectionMethod('Sourcegraph\PHP\Grapher', 'parse');
+        $method = new ReflectionMethod('Sourcegraph\PHP\Grapher', 'getNodes');
         $method->setAccessible(true);
 
-        return $method->invokeArgs($grapher, [$filename]);
+        return $method->invokeArgs($grapher, [$filename, []]);
+    }
+
+    public function loadUnitFixture()
+    {
+        $filename = $this->getFixtureFullPath('../unit.json');
+
+        return json_decode(file_get_contents($filename));
     }
 }

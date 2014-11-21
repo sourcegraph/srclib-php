@@ -4,6 +4,7 @@ namespace Sourcegraph\PHP;
 
 use PhpParser\Parser;
 use PhpParser\Lexer;
+use PhpParser\Error;
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\PrettyPrinter;
@@ -59,36 +60,60 @@ class Grapher
         $this->extractors['Refs'] = new Grapher\RefExtractor();
     }
 
-    protected function parse($filename)
-    {
-        $stmts = $this->parser->parse($this->readFile($filename));
-        $this->traverser->traverse($stmts);
-
-        return $this->nodeCollector->getNodes();
-    }
-
     private function readFile($filename)
     {
         return file_get_contents($filename);
     }
 
-    public function run($filename)
+    public function run(Array $unit)
     {
-        $relativeFile = $this->getRelativeFilename($filename);
-        $nodes = $this->parse($filename);
+        $output = [];
+        $results = $this->parse($unit);
+        foreach ($results as $result) {
+            foreach ($this->extractors as $key => $_) {
+                if (!isset($output[$key])) {
+                    $output[$key] = [];
+                }
 
+                $output[$key] = array_merge($output[$key], $result[$key]);
+            }
+        }
+
+        return $output;
+    }
+
+    protected function parse(Array $unit)
+    {
         $result = [];
-        foreach ($this->extractors as $key => $extractor) {
-            $result[$key] = $extractor->extract($relativeFile, $nodes);
+        foreach ($unit['Files'] as $filename) {
+            $result[$filename] = $this->parseFile($filename, $unit);
         }
 
         return $result;
     }
 
-    private function getRelativeFilename($filename)
+    protected function parseFile($filename, Array $unit)
     {
-        $filename = realpath($filename);
+        $nodes = $this->getNodes($filename, $unit);
 
-        return str_replace($this->projectPath, '', $filename);
+        $result = [];
+        foreach ($this->extractors as $key => $extractor) {
+            $result[$key] = $extractor->extract($filename, $nodes);
+        }
+
+        return $result;
+    }
+
+    protected function getNodes($filename, Array $unit)
+    {
+        try {
+            $stmts = $this->parser->parse($this->readFile($filename), $unit);
+        } catch (Error $e) {
+            return [];
+        }
+
+        $this->traverser->traverse($stmts);
+
+        return $this->nodeCollector->getNodes();
     }
 }

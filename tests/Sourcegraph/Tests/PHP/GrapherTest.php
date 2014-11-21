@@ -12,8 +12,10 @@ class GrapherTest extends TestCase
         $filename = $this->getFixtureFullPath('500.complex.php');
 
         $grapher = new Grapher(BASE_PATH);
-        $result = $grapher->run($filename);
+        $result = $grapher->run(['Files' => [$filename ]]);
 
-        //echo json_encode($result, JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);
+        $this->assertCount(15, $result['Defs']);
+        $this->assertCount(4, $result['Docs']);
+        $this->assertCount(13, $result['Refs']);
     }
 }

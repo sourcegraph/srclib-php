@@ -13,6 +13,7 @@ class RefExtractorTest extends TestCase
     public function testAnalyzer($filename, Array $expected)
     {
         $nodes = $this->loadNodeFixture($filename);
+        $unit = $this->loadUnitFixture();
 
         $extractor = new RefExtractor();
         $result = $extractor->extract($filename, $nodes);

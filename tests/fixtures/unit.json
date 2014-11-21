@@ -1,0 +1,54 @@
+{
+  "Name": "sourcegraph\/srclib-php",
+  "Type": "ComposerPackage",
+  "Repo": "github.com\/mcuadros\/srclib-php",
+  "Globs": [
+  ],
+  "Files": [
+    "src\/Sourcegraph\/PHP\/Command\/GraphCommand.php",
+    "src\/Sourcegraph\/PHP\/Command\/ScannerCommand.php",
+    "src\/Sourcegraph\/PHP\/Grapher\/DefExtractor.php",
+    "src\/Sourcegraph\/PHP\/Grapher\/DocExtractor.php",
+    "src\/Sourcegraph\/PHP\/Grapher\/RefExtractor.php",
+    "src\/Sourcegraph\/PHP\/Grapher.php",
+    "src\/Sourcegraph\/PHP\/NodeVisitor\/NodeCollector.php",
+    "src\/Sourcegraph\/PHP\/Scanner\/SourceUnitBuilder.php",
+    "src\/Sourcegraph\/PHP\/Scanner.php",
+    "tests\/bootstrap.php",
+    "tests\/fixtures\/graph\/000.invalid.php",
+    "tests\/fixtures\/graph\/001.functions.php",
+    "tests\/fixtures\/graph\/002.classes.php",
+    "tests\/fixtures\/graph\/003.constants.php",
+    "tests\/fixtures\/graph\/004.properties.php",
+    "tests\/fixtures\/graph\/005.traits.php",
+    "tests\/fixtures\/graph\/006.interfaces.php",
+    "tests\/fixtures\/graph\/101.params.php",
+    "tests\/fixtures\/graph\/102.uses.php",
+    "tests\/fixtures\/graph\/103.inherance.php",
+    "tests\/fixtures\/graph\/104.asigns.php",
+    "tests\/fixtures\/graph\/500.complex.php",
+    "tests\/fixtures\/scanner\/monolog\/src\/Monolog\/Logger.php",
+    "tests\/Sourcegraph\/Tests\/PHP\/Grapher\/DefExtractorTest.php",
+    "tests\/Sourcegraph\/Tests\/PHP\/Grapher\/DocExtractorTest.php",
+    "tests\/Sourcegraph\/Tests\/PHP\/Grapher\/RefExtractorTest.php",
+    "tests\/Sourcegraph\/Tests\/PHP\/GrapherTest.php",
+    "tests\/Sourcegraph\/Tests\/PHP\/Scanner\/SourceUnitBuilderTest.php",
+    "tests\/Sourcegraph\/Tests\/PHP\/ScannerTest.php",
+    "tests\/Sourcegraph\/Tests\/TestCase.php"
+  ],
+  "Dir": "",
+  "Dependencies": [
+    "nikic\/php-parser",
+    "symfony\/console",
+    "phpunit\/phpunit"
+  ],
+  "Data": {
+    "namespaces": [
+      "Sourcegraph\\PHP"
+    ]
+  },
+  "Ops": {
+    "depresolve": null,
+    "graph": null
+  }
+}
