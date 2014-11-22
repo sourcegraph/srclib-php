@@ -9,6 +9,7 @@ use RuntimeException;
 use UnexpectedValueException;
 use SplFileInfo;
 use Sourcegraph\PHP\SourceUnit\ComposerPackage\ComposerJson;
+use Sourcegraph\PHP\SourceUnit\ComposerPackage\ComposerLock;
 
 class ComposerPackage
 {
@@ -19,11 +20,13 @@ class ComposerPackage
 
     protected $path;
     protected $json;
+    protected $lock;
 
     public function __construct($path)
     {
         $this->path = $path;
         $this->json = new ComposerJson($path);
+        $this->lock = new ComposerLock($path);
     }
 
     public function getName()
@@ -87,6 +90,16 @@ class ComposerPackage
 
         $ext = pathinfo($file->getFilename(), PATHINFO_EXTENSION);
         return in_array($ext, $this->extensions);
+    }
+
+    public function getPackageName($namespace)
+    {
+        return $this->lock->getPackageName($namespace);
+    }
+
+    public function getRepository($packageName)
+    {
+        return $this->lock->getRepository($packageName);
     }
 
     public function toArray()

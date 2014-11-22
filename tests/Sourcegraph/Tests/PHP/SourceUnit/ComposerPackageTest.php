@@ -20,6 +20,24 @@ class ComposerPackageTest extends TestCase
         $this->assertSame($package->getFiles(), ['src/Monolog/Logger.php']);
     }
 
+    public function testGetPackageName()
+    {
+        $package = new ComposerPackage(BASE_PATH);
+        $this->assertSame(
+            $package->getPackageName('Symfony\Component\Console\Question'),
+            'symfony/console'
+        );
+    }
+
+    public function testGetRepository()
+    {
+        $path = TEST_PATH . '/fixtures/scanner/monolog/';
+        $package = new ComposerPackage($path);
+        $this->assertSame(
+            $package->getRepository('psr/log'),
+            'https://github.com/php-fig/log.git'
+        );
+    }
 
     public function testGetDependencies()
     {

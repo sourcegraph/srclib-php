@@ -4,38 +4,9 @@ namespace Sourcegraph\PHP\SourceUnit\ComposerPackage;
 
 use RuntimeException;
 
-class ComposerJson
+class ComposerJson extends JsonFile
 {
-    const FILE = 'composer.json';
-
-    protected $path;
-    protected $data;
-
-    public function __construct($path)
-    {
-        $this->path = realpath($path);
-        $this->read();
-    }
-
-    protected function read()
-    {
-        $file = $this->path . DIRECTORY_SEPARATOR . self::FILE;
-        if (!file_exists($file)) {
-            throw new RuntimeException(
-                'Invalid Package cannot found composer.json file'
-            );
-        }
-
-        if (!$content = @file_get_contents($file)) {
-            throw new RuntimeException(
-                'Error reading composer.json file'
-            );
-        }
-
-        if (!$this->data = @json_decode($content, true)) {
-            throw new RuntimeException('Unable to parse composer.json file');
-        }
-    }
+    protected $file = 'composer.json';
 
     public function getName()
     {
