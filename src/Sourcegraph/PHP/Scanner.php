@@ -2,24 +2,20 @@
 
 namespace Sourcegraph\PHP;
 
-use Sourcegraph\PHP\Scanner\SourceUnitBuilder;
+use Sourcegraph\PHP\SourceUnit\ComposerPackage;
+
 
 class Scanner
 {
-    protected $builder;
-
-    public function __construct()
-    {
-        $this->setUpSourceUnitBuilder();
-    }
-
-    protected function setUpSourceUnitBuilder()
-    {
-        $this->builder = new SourceUnitBuilder();
-    }
-
     public function run($path)
     {
-        return [$this->builder->build($path)];
+        $package = $this->buildComposerPackage($path);
+
+        return [$package->toArray()];
+    }
+
+    protected function buildComposerPackage($path)
+    {
+        return new ComposerPackage($path);
     }
 }
