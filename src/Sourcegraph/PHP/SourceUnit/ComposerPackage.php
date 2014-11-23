@@ -10,8 +10,9 @@ use UnexpectedValueException;
 use SplFileInfo;
 use Sourcegraph\PHP\SourceUnit\ComposerPackage\ComposerJson;
 use Sourcegraph\PHP\SourceUnit\ComposerPackage\ComposerLock;
+use Sourcegraph\PHP\SourceUnit;
 
-class ComposerPackage
+class ComposerPackage implements SourceUnit
 {
     const TYPE = 'ComposerPackage';
 

@@ -25,13 +25,13 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $method = new ReflectionMethod('Sourcegraph\PHP\Grapher', 'getNodes');
         $method->setAccessible(true);
 
-        return $method->invokeArgs($grapher, [$filename, []]);
+        $unit = $this->getSourceUnitMock();
+
+        return $method->invokeArgs($grapher, [$unit, $filename]);
     }
 
-    public function loadUnitFixture()
+    public function getSourceUnitMock()
     {
-        $filename = $this->getFixtureFullPath('../unit.json');
-
-        return json_decode(file_get_contents($filename));
+        return $this->getMock('Sourcegraph\PHP\SourceUnit');
     }
 }

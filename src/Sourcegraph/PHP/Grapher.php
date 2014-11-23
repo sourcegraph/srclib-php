@@ -12,6 +12,7 @@ use PhpParser\NodeVisitorAbstract;
 use PhpParser\NodeVisitor\NameResolver;
 use Sourcegraph\PHP\NodeVisitor;
 use Sourcegraph\PHP\Grapher;
+use Sourcegraph\PHP\SourceUnit;
 
 class Grapher
 {
@@ -24,16 +25,14 @@ class Grapher
     const KIND_TRAIT = 'trait';
     const KIND_INTERFACE = 'interface';
 
-    private $projectPath;
+    private $unit;
     private $parser;
     private $traverser;
     private $nodeCollector;
     private $extractors;
 
-    public function __construct($projectPath)
+    public function __construct()
     {
-        $this->projectPath = realpath($projectPath);
-
         $this->setUpParser();
         $this->setUpTraverser();
         $this->setUpExtractors();
@@ -65,7 +64,7 @@ class Grapher
         return file_get_contents($filename);
     }
 
-    public function run(Array $unit)
+    public function run(SourceUnit $unit)
     {
         $output = [];
         $results = $this->parse($unit);
@@ -82,32 +81,32 @@ class Grapher
         return $output;
     }
 
-    protected function parse(Array $unit)
+    protected function parse(SourceUnit $unit)
     {
         $result = [];
-        foreach ($unit['Files'] as $filename) {
-            $result[$filename] = $this->parseFile($filename, $unit);
+        foreach ($unit->getFiles() as $filename) {
+            $result[$filename] = $this->parseFile($unit, $filename);
         }
 
         return $result;
     }
 
-    protected function parseFile($filename, Array $unit)
+    protected function parseFile(SourceUnit $unit, $filename)
     {
-        $nodes = $this->getNodes($filename, $unit);
+        $nodes = $this->getNodes($unit, $filename);
 
         $result = [];
         foreach ($this->extractors as $key => $extractor) {
-            $result[$key] = $extractor->extract($filename, $nodes);
+            $result[$key] = $extractor->extract($unit, $filename, $nodes);
         }
 
         return $result;
     }
 
-    protected function getNodes($filename, Array $unit)
+    protected function getNodes(SourceUnit $unit, $filename)
     {
         try {
-            $stmts = $this->parser->parse($this->readFile($filename), $unit);
+            $stmts = $this->parser->parse($this->readFile($filename));
         } catch (Error $e) {
             return [];
         }
