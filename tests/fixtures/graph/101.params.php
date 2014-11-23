@@ -7,7 +7,7 @@ namespace Foo {
         const QUX = 'qux';
     }
 
-    function qux(Bar $bar, $baz = BAZ) {}
+    function qux(Bar $bar, $baz = BAZ, Array $qux) {}
 }
 
 namespace Baz {

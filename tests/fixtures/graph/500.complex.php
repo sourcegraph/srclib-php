@@ -1,6 +1,7 @@
 <?php
 
 namespace Foo;
+use DateTime;
 
 const QUX = 'test';
 
@@ -9,8 +10,9 @@ const QUX = 'test';
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class Bar implements Baz
+class Bar extends Foo implements Baz
 {
+    const BAZ = 'baz';
     use Qux;
 
     /* Escapes "<" special char in given text. */
@@ -18,7 +20,7 @@ class Bar implements Baz
     private $privateProperty;
     protected $protectedProperty;
 
-    public function __construct($foo) {
+    public function __construct(Foo $foo) {
         $this->foo = $foo;
     }
 
@@ -34,6 +36,7 @@ class Bar implements Baz
     private function privateMethod() {}
 }
 
+class Foo {}
 
 /**
  * Setup the layout used by the controller.
@@ -47,4 +50,9 @@ interface Baz
     public function publicMethod();
 }
 
-function baz() {}
+function baz(DateTime $bar, $qux = QUX) {
+    $foo = Bar::BAZ;
+}
+
+
+$bar = new Bar(new Foo());

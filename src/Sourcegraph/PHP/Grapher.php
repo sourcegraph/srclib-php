@@ -4,6 +4,7 @@ namespace Sourcegraph\PHP;
 
 use PhpParser\Parser;
 use PhpParser\Lexer;
+use PhpParser\Error;
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\PrettyPrinter;
@@ -11,6 +12,7 @@ use PhpParser\NodeVisitorAbstract;
 use PhpParser\NodeVisitor\NameResolver;
 use Sourcegraph\PHP\NodeVisitor;
 use Sourcegraph\PHP\Grapher;
+use Sourcegraph\PHP\SourceUnit;
 
 class Grapher
 {
@@ -23,16 +25,14 @@ class Grapher
     const KIND_TRAIT = 'trait';
     const KIND_INTERFACE = 'interface';
 
-    private $projectPath;
+    private $unit;
     private $parser;
     private $traverser;
     private $nodeCollector;
     private $extractors;
 
-    public function __construct($projectPath)
+    public function __construct()
     {
-        $this->projectPath = realpath($projectPath);
-
         $this->setUpParser();
         $this->setUpTraverser();
         $this->setUpExtractors();
@@ -54,16 +54,9 @@ class Grapher
 
     protected function setUpExtractors()
     {
-        $this->extractors['defs'] = new Grapher\DefExtractor();
-        $this->extractors['docs'] = new Grapher\DocExtractor();
-    }
-
-    protected function parse($filename)
-    {
-        $stmts = $this->parser->parse($this->readFile($filename));
-        $this->traverser->traverse($stmts);
-
-        return $this->nodeCollector->getNodes();
+        $this->extractors['Defs'] = new Grapher\DefExtractor();
+        $this->extractors['Docs'] = new Grapher\DocExtractor();
+        $this->extractors['Refs'] = new Grapher\RefExtractor();
     }
 
     private function readFile($filename)
@@ -71,23 +64,55 @@ class Grapher
         return file_get_contents($filename);
     }
 
-    public function run($filename)
+    public function run(SourceUnit $unit)
     {
-        $relativeFile = $this->getRelativeFilename($filename);
-        $nodes = $this->parse($filename);
+        $output = [];
+        $results = $this->parse($unit);
+        foreach ($results as $result) {
+            foreach ($this->extractors as $key => $_) {
+                if (!isset($output[$key])) {
+                    $output[$key] = [];
+                }
 
+                $output[$key] = array_merge($output[$key], $result[$key]);
+            }
+        }
+
+        return $output;
+    }
+
+    protected function parse(SourceUnit $unit)
+    {
         $result = [];
-        foreach ($this->extractors as $key => $extractor) {
-            $result[$key] = $extractor->extract($relativeFile, $nodes);
+        foreach ($unit->getFiles() as $filename) {
+            $result[$filename] = $this->parseFile($unit, $filename);
         }
 
         return $result;
     }
 
-    private function getRelativeFilename($filename)
+    protected function parseFile(SourceUnit $unit, $filename)
     {
-        $filename = realpath($filename);
+        $nodes = $this->getNodes($unit, $filename);
 
-        return str_replace($this->projectPath, '', $filename);
+        $result = [];
+        foreach ($this->extractors as $key => $extractor) {
+            $result[$key] = $extractor->extract($unit, $filename, $nodes);
+        }
+
+        return $result;
+    }
+
+    protected function getNodes(SourceUnit $unit, $filename)
+    {
+        try {
+            $stmts = $this->parser->parse($this->readFile($filename));
+        } catch (Error $e) {
+            return [];
+        }
+
+        $this->traverser->traverse($stmts);
+
+        return $this->nodeCollector->getNodes();
     }
 }

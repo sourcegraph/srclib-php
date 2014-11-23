@@ -2,14 +2,15 @@
 
 namespace Sourcegraph\Tests;
 
-use Sourcegraph\PHP\Grapher;
 use ReflectionMethod;
+use Sourcegraph\PHP\Grapher;
+use Sourcegraph\PHP\SourceUnit\ComposerPackage;
 
 class TestCase extends \PHPUnit_Framework_TestCase
 {
     protected function getFixtureFullPath($filename)
     {
-        return TEST_PATH . '/fixtures/' . $filename;
+        return TEST_PATH . '/fixtures/graph/' . $filename;
     }
 
     public function loadCodeFixture($filename)
@@ -22,9 +23,16 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $filename = $this->getFixtureFullPath($filename);
         $grapher = new Grapher(BASE_PATH);
 
-        $method = new ReflectionMethod('Sourcegraph\PHP\Grapher', 'parse');
+        $method = new ReflectionMethod('Sourcegraph\PHP\Grapher', 'getNodes');
         $method->setAccessible(true);
 
-        return $method->invokeArgs($grapher, [$filename]);
+        $unit = $this->getSourceUnitMock();
+
+        return $method->invokeArgs($grapher, [$unit, $filename]);
+    }
+
+    public function getSourceUnitMock($path = BASE_PATH)
+    {
+        return new ComposerPackage(BASE_PATH);
     }
 }

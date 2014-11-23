@@ -2,16 +2,17 @@
 
 namespace Sourcegraph\PHP\Grapher;
 
-use Sourcegraph\PHP\Grapher;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
+use Sourcegraph\PHP\SourceUnit;
+use Sourcegraph\PHP\Grapher;
 
-class DocExtractor
+class DocExtractor implements Extractor
 {
     protected $defaultMIME = 'text/plain';
 
-    public function extract($filename, Array $nodes, $test = false)
+    public function extract(SourceUnit $unit, $filename, Array $nodes, $test = false)
     {
         $docs = [];
         foreach ($nodes as $node) {

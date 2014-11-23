@@ -12,11 +12,36 @@ class RefExtractorTest extends TestCase
      */
     public function testAnalyzer($filename, Array $expected)
     {
+        $expected = $this->setGlobalArgs($expected);
+
         $nodes = $this->loadNodeFixture($filename);
+        $unit = $this->getSourceUnitMock();
 
         $extractor = new RefExtractor();
-        $result = $extractor->extract($filename, $nodes);
+        $result = $extractor->extract($unit, $filename, $nodes);
         $this->assertEquals($result, $expected);
+    }
+
+    public function setGlobalArgs(Array $expected)
+    {
+        $result = [];
+        foreach ($expected as $key => $value) {
+            if (!isset($value['DefUnit'])) {
+                $value['DefUnit'] = null;
+            }
+
+            if (!isset($value['DefUnitType'])) {
+                $value['DefUnitType'] = 'ComposerPackage';
+            }
+
+            if (!isset($value['DefRepo'])) {
+                $value['DefRepo'] = null;
+            }
+
+            $result[] = $value;
+        }
+
+        return $result;
     }
 
     public function provider()
@@ -34,25 +59,35 @@ class RefExtractorTest extends TestCase
                     'Start' => 140,
                     'End' => 150,
                 ], [
+                    'DefPath' => 'BAZ',
+                    'File' => '101.params.php',
+                    'Start' => 147,
+                    'End' => 150,
+                ], [
                     'DefPath' => 'Foo/Qux',
                     'File' => '101.params.php',
-                    'Start' => 178,
-                    'End' => 190,
+                    'Start' => 190,
+                    'End' => 202,
                 ], [
                     'DefPath' => 'Foo/Bar',
                     'File' => '101.params.php',
-                    'Start' => 248,
-                    'End' => 261,
+                    'Start' => 260,
+                    'End' => 273,
                 ], [
                     'DefPath' => 'Foo/Qux',
                     'File' => '101.params.php',
-                    'Start' => 263,
-                    'End' => 271,
+                    'Start' => 275,
+                    'End' => 283,
                 ], [
                     'DefPath' => 'Foo/Qux/QUX',
                     'File' => '101.params.php',
-                    'Start' => 326,
-                    'End' => 341,
+                    'Start' => 338,
+                    'End' => 353,
+                ], [
+                    'DefPath' => 'Foo/Qux/QUX',
+                    'File' => '101.params.php',
+                    'Start' => 345,
+                    'End' => 353,
                 ]
             ]],
             ['102.uses.php', [
@@ -108,17 +143,75 @@ class RefExtractorTest extends TestCase
                     'Start' => 118,
                     'End' => 139,
                 ], [
+                    'DefPath' => 'Foo/Baz',
+                    'File' => '104.asigns.php',
+                    'Start' => 125,
+                    'End' => 139,
+                ], [
                     'DefPath' => 'Baz/Baz/BAR',
                     'File' => '104.asigns.php',
                     'Start' => 145,
+                    'End' => 160,
+                ], [
+                    'DefPath' => 'Baz/Baz/BAR',
+                    'File' => '104.asigns.php',
+                    'Start' => 152,
                     'End' => 160,
                 ], [
                     'DefPath' => 'FOO',
                     'File' => '104.asigns.php',
                     'Start' => 166,
                     'End' => 176,
+                ], [
+                    'DefPath' => 'FOO',
+                    'File' => '104.asigns.php',
+                    'Start' => 173,
+                    'End' => 176,
                 ]
             ]],
+            ['105.refs.php', [
+                [
+                    'DefPath' => 'Sourcegraph/PHP/Grapher',
+                    'DefUnit' => 'sourcegraph/srclib-php',
+                    'DefUnitType' => 'ComposerPackage',
+                    'DefRepo' => NULL,
+                    'File' => '105.refs.php',
+                    'Start' => 7,
+                    'End' => 35,
+                ], [
+                    'DefPath' => 'Symfony/Component/Console/Input/InputOption',
+                    'DefUnit' => 'symfony/console',
+                    'DefUnitType' => 'ComposerPackage',
+                    'DefRepo' => 'https://github.com/symfony/console.git',
+                    'File' => '105.refs.php',
+                    'Start' => 36,
+                    'End' => 84,
+                ], [
+                    'DefPath' => 'Sourcegraph/PHP/Grapher',
+                    'DefUnit' => 'sourcegraph/srclib-php',
+                    'DefUnitType' => 'ComposerPackage',
+                    'DefRepo' => NULL,
+                    'File' => '105.refs.php',
+                    'Start' => 99,
+                    'End' => 116,
+                ], [
+                    'DefPath' => 'Symfony/Component/Console/Input/InputOption',
+                    'DefUnit' => 'symfony/console',
+                    'DefUnitType' => 'ComposerPackage',
+                    'DefRepo' => 'https://github.com/symfony/console.git',
+                    'File' => '105.refs.php',
+                    'Start' => 124,
+                    'End' => 153,
+                ], [
+                    'DefPath' => 'Symfony/Component/Console/Input/InputOption',
+                    'DefUnit' => 'symfony/console',
+                    'DefUnitType' => 'ComposerPackage',
+                    'DefRepo' => 'https://github.com/symfony/console.git',
+                    'File' => '105.refs.php',
+                    'Start' => 136,
+                    'End' => 153,
+                ]
+            ]]
         ];
     }
 }

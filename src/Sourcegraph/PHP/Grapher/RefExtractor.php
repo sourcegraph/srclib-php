@@ -2,29 +2,30 @@
 
 namespace Sourcegraph\PHP\Grapher;
 
-use Sourcegraph\PHP\Grapher;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Expr;
+use Sourcegraph\PHP\SourceUnit;
+use Sourcegraph\PHP\Grapher;
 
-class RefExtractor
+class RefExtractor implements Extractor
 {
-    public function extract($filename, Array $nodes, $test = false)
+    public function extract(SourceUnit $unit, $filename, Array $nodes, $test = false)
     {
         $refs = [];
         foreach ($nodes as $node) {
             switch (true) {
                 case $node instanceof Stmt\Class_:
-                    $r = $this->buildRefFromClass($node, $filename, $test);
+                    $r = $this->buildRefFromClass($node, $unit, $filename, $test);
                     break;
                 case $node instanceof Stmt\TraitUse:
-                    $r = $this->buildRefFromTraitUse($node, $filename, $test);
+                    $r = $this->buildRefFromTraitUse($node, $unit, $filename, $test);
                     break;
                 default:
                     $r = [];
-                    if ($ref = $this->buildRef($node, $filename, $test)) {
+                    if ($ref = $this->buildRef($node, $unit, $filename, $test)) {
                         $r[] = $ref;
                     }
                     break;
@@ -36,7 +37,7 @@ class RefExtractor
         return $refs;
     }
 
-    protected function buildRefFromClass(Stmt\Class_ $node, $filename, $test)
+    protected function buildRefFromClass(Stmt\Class_ $node, SourceUnit $unit, $filename, $test)
     {
         $result = [];
         $names = $node->implements;
@@ -46,7 +47,7 @@ class RefExtractor
 
         foreach ($names as $name) {
             $ref = $this->extractNameFullyQualified($name, $filename, $test);
-            $this->applyGlobal($ref, $name, $filename, $test);
+            $this->applyGlobal($ref, $name, $unit, $filename, $test);
             $result[] = $ref;
         }
 
@@ -54,12 +55,12 @@ class RefExtractor
     }
 
 
-    protected function buildRefFromTraitUse(Stmt\TraitUse $node, $filename, $test)
+    protected function buildRefFromTraitUse(Stmt\TraitUse $node, SourceUnit $unit, $filename, $test)
     {
         $result = [];
         foreach ($node->traits as $name) {
             $ref = $this->extractNameFullyQualified($name);
-            $this->applyGlobal($ref, $name, $filename, $test);
+            $this->applyGlobal($ref, $name, $unit, $filename, $test);
             $result[] = $ref;
         }
 
@@ -73,7 +74,7 @@ class RefExtractor
         ];
     }
 
-    protected function buildRef(Node $node, $filename, $test)
+    protected function buildRef(Node $node, SourceUnit $unit, $filename, $test)
     {
         switch (true) {
             case $node instanceof Param:
@@ -81,6 +82,15 @@ class RefExtractor
                 break;
             case $node instanceof Stmt\Use_:
                 $ref = $this->extractStmtUse($node);
+                break;
+            case $node instanceof Expr\ConstFetch:
+                $ref = $this->extractExprConstFetch($node);
+                break;
+            case $node instanceof Expr\ClassConstFetch:
+                $ref = $this->extractExprClassConstFetch($node);
+                break;
+            case $node instanceof Expr\New_:
+                $ref = $this->extractExprNew($node);
                 break;
             case $node instanceof Expr\Assign:
                 $ref = $this->extractExprAssign($node);
@@ -90,7 +100,7 @@ class RefExtractor
         }
 
         if ($ref) {
-            $this->applyGlobal($ref, $node, $filename, $test);
+            $this->applyGlobal($ref, $node, $unit, $filename, $test);
         }
 
         return $ref;
@@ -98,16 +108,16 @@ class RefExtractor
 
     protected function extractParam(Param $node)
     {
-        if ($node->type) {
+        if ($node->type && $node->type != 'array') {
             return $this->extractParamFromType($node);
         }
 
         if ($node->default && $node->default instanceof Expr\ClassConstFetch) {
-            return $this->extractClassConstFetch($node->default);
+            return $this->extractExprClassConstFetch($node->default);
         }
 
         if ($node->default && $node->default instanceof Expr\ConstFetch) {
-            return $this->extractConstFetch($node->default);
+            return $this->extractExprConstFetch($node->default);
         }
     }
 
@@ -128,20 +138,20 @@ class RefExtractor
     protected function extractExprAssign(Expr\Assign $node)
     {
         if ($node->expr && $node->expr instanceof Expr\New_) {
-            return $this->extractNew($node->expr);
+            return $this->extractExprNew($node->expr);
         }
 
         if ($node->expr && $node->expr instanceof Expr\ConstFetch) {
-            return $this->extractConstFetch($node->expr);
+            return $this->extractExprConstFetch($node->expr);
         }
 
         if ($node->expr && $node->expr instanceof Expr\ClassConstFetch) {
-            return $this->extractClassConstFetch($node->expr);
+            return $this->extractExprClassConstFetch($node->expr);
         }
     }
 
 
-    protected function extractClassConstFetch(Expr\ClassConstFetch $node)
+    protected function extractExprClassConstFetch(Expr\ClassConstFetch $node)
     {
         $name = clone $node->class;
         $name->append($node->name);
@@ -151,22 +161,25 @@ class RefExtractor
         ];
     }
 
-    protected function extractConstFetch(Expr\ConstFetch $node)
+    protected function extractExprConstFetch(Expr\ConstFetch $node)
     {
         return [
             'DefPath' => $node->name->toString('/')
         ];
     }
 
-    protected function extractNew(Expr\New_ $node)
+    protected function extractExprNew(Expr\New_ $node)
     {
         return [
             'DefPath' => $node->class->toString('/')
         ];
     }
 
-    protected function applyGlobal(Array &$ref, Node $node, $filename, $test)
+    protected function applyGlobal(Array &$ref, Node $node, SourceUnit $unit, $filename, $test)
     {
+        $ref['DefUnit'] = $unit->getPackageName($ref['DefPath']);
+        $ref['DefUnitType'] = $unit->getType();
+        $ref['DefRepo'] = $unit->getRepository($ref['DefUnit']);
         $ref['File'] = $filename;
         $ref['Start'] = $node->getAttribute('startPos');
         $ref['End'] = $node->getAttribute('endPos');
