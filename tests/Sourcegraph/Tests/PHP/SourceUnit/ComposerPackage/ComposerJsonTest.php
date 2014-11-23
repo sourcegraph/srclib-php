@@ -14,7 +14,7 @@ class ComposerJsonTest extends TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException Sourcegraph\PHP\SourceUnit\FileNotFound
      */
     public function testRead()
     {
