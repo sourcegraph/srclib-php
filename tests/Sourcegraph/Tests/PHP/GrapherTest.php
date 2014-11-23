@@ -13,7 +13,10 @@ class GrapherTest extends TestCase
 
         $unit = $this->getMock(
             'Sourcegraph\PHP\SourceUnit',
-            ['getFiles', 'getPackageName', 'getType', 'getRepository']
+            [
+                'getFiles', 'getPackageName', 'getType', 'getRepository',
+                'getDependencies', 'getRequiredVersion', 'getCommit'
+            ]
         );
 
         $unit->method('getFiles')->willReturn([$filename]);

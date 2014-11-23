@@ -9,4 +9,5 @@ use Symfony\Component\Console\Application;
 $app = new Application('srclib-php', '0.1.0');
 $app->add(new Command\ScannerCommand);
 $app->add(new Command\GraphCommand);
+$app->add(new Command\DepResolverCommand);
 $app->run();

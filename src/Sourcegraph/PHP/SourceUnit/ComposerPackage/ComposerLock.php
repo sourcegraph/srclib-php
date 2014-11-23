@@ -81,4 +81,13 @@ class ComposerLock extends JsonFile
 
         return strtolower($this->repositories[$packageName]['url']);
     }
+
+    public function getCommit($packageName)
+    {
+        if (!isset($this->repositories[$packageName]['reference'])) {
+            return null;
+        }
+
+        return $this->repositories[$packageName]['reference'];
+    }
 }

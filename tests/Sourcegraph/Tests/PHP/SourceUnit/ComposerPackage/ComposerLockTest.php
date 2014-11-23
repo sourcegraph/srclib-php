@@ -31,6 +31,16 @@ class ComposerLockTest extends TestCase
         );
     }
 
+    public function testGetCommit()
+    {
+        $path = TEST_PATH . '/fixtures/scanner/monolog/';
+        $lock = new ComposerLock($path);
+        $this->assertSame(
+            'fe0936ee26643249e916849d48e3a51d5f5e278b',
+            $lock->getCommit('psr/log')
+        );
+    }
+
     public function testGetRepositoryNotFound()
     {
         $lock = new ComposerLock(BASE_PATH);

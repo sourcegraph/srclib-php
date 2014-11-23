@@ -38,6 +38,19 @@ class ComposerJson extends JsonFile
         return array_keys($deps);
     }
 
+    public function getRequiredVersion($packageName)
+    {
+        foreach (['require', 'require-dev'] as $key) {
+            foreach ($this->data[$key] as $package => $version) {
+                if ($package == $packageName) {
+                    return $version;
+                }
+            }
+        }
+
+        return null;
+    }
+
     public function getNamespaces()
     {
         $ns = [];

@@ -38,6 +38,15 @@ class ComposerJsonTest extends TestCase
         ]);
     }
 
+    public function testGetRequiredVersion()
+    {
+        $package = new ComposerJson(BASE_PATH);
+        $this->assertSame(
+            $package->getRequiredVersion('symfony/console'),
+            '2.5.*'
+        );
+    }
+
     public function testGetNamespacesPSR0()
     {
         $package = new ComposerJson(BASE_PATH);
