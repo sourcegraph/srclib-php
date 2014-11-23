@@ -7,11 +7,9 @@ use Sourcegraph\PHP\Grapher;
 
 class GrapherTest extends TestCase
 {
-    public function testRun()
+    public function setUp()
     {
-        $filename = $this->getFixtureFullPath('500.complex.php');
-
-        $unit = $this->getMock(
+        $this->unit = $this->getMock(
             'Sourcegraph\PHP\SourceUnit',
             [
                 'getFiles', 'getPackageName', 'getType', 'getRepository',
@@ -19,13 +17,31 @@ class GrapherTest extends TestCase
             ]
         );
 
-        $unit->method('getFiles')->willReturn([$filename]);
+    }
+
+    public function testRun()
+    {
+        $filename = $this->getFixtureFullPath('500.complex.php');
+        $this->unit->method('getFiles')->willReturn([$filename]);
 
         $grapher = new Grapher(BASE_PATH);
-        $result = $grapher->run($unit);
+        $result = $grapher->run($this->unit);
 
         $this->assertCount(15, $result['Defs']);
         $this->assertCount(4, $result['Docs']);
         $this->assertCount(13, $result['Refs']);
+    }
+
+    public function testRunInvalid()
+    {
+        $filename = $this->getFixtureFullPath('000.invalid.php');
+        $this->unit->method('getFiles')->willReturn([$filename]);
+
+        $grapher = new Grapher(BASE_PATH);
+        $result = $grapher->run($this->unit);
+
+        $this->assertCount(0, $result['Defs']);
+        $this->assertCount(0, $result['Docs']);
+        $this->assertCount(0, $result['Refs']);
     }
 }
