@@ -30,6 +30,11 @@ class ComposerPackage implements SourceUnit
         $this->lock = new ComposerLock($path);
     }
 
+    public function getType()
+    {
+        return self::TYPE;
+    }
+
     public function getName()
     {
         return $this->json->getName();
@@ -93,8 +98,16 @@ class ComposerPackage implements SourceUnit
         return in_array($ext, $this->extensions);
     }
 
-    public function getPackageName($namespace)
+    public function getPackageName($defPath)
     {
+        $namespace = str_replace('/', '\\', $defPath);
+
+        foreach ($this->json->getNamespaces() as $ns) {
+            if (stripos($namespace, $ns) !== false) {
+                return $this->getName();
+            }
+        }
+
         return $this->lock->getPackageName($namespace);
     }
 

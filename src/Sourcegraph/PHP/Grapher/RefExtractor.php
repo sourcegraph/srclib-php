@@ -18,14 +18,14 @@ class RefExtractor implements Extractor
         foreach ($nodes as $node) {
             switch (true) {
                 case $node instanceof Stmt\Class_:
-                    $r = $this->buildRefFromClass($node, $filename, $test);
+                    $r = $this->buildRefFromClass($node, $unit, $filename, $test);
                     break;
                 case $node instanceof Stmt\TraitUse:
-                    $r = $this->buildRefFromTraitUse($node, $filename, $test);
+                    $r = $this->buildRefFromTraitUse($node, $unit, $filename, $test);
                     break;
                 default:
                     $r = [];
-                    if ($ref = $this->buildRef($node, $filename, $test)) {
+                    if ($ref = $this->buildRef($node, $unit, $filename, $test)) {
                         $r[] = $ref;
                     }
                     break;
@@ -37,7 +37,7 @@ class RefExtractor implements Extractor
         return $refs;
     }
 
-    protected function buildRefFromClass(Stmt\Class_ $node, $filename, $test)
+    protected function buildRefFromClass(Stmt\Class_ $node, SourceUnit $unit, $filename, $test)
     {
         $result = [];
         $names = $node->implements;
@@ -47,7 +47,7 @@ class RefExtractor implements Extractor
 
         foreach ($names as $name) {
             $ref = $this->extractNameFullyQualified($name, $filename, $test);
-            $this->applyGlobal($ref, $name, $filename, $test);
+            $this->applyGlobal($ref, $name, $unit, $filename, $test);
             $result[] = $ref;
         }
 
@@ -55,12 +55,12 @@ class RefExtractor implements Extractor
     }
 
 
-    protected function buildRefFromTraitUse(Stmt\TraitUse $node, $filename, $test)
+    protected function buildRefFromTraitUse(Stmt\TraitUse $node, SourceUnit $unit, $filename, $test)
     {
         $result = [];
         foreach ($node->traits as $name) {
             $ref = $this->extractNameFullyQualified($name);
-            $this->applyGlobal($ref, $name, $filename, $test);
+            $this->applyGlobal($ref, $name, $unit, $filename, $test);
             $result[] = $ref;
         }
 
@@ -74,7 +74,7 @@ class RefExtractor implements Extractor
         ];
     }
 
-    protected function buildRef(Node $node, $filename, $test)
+    protected function buildRef(Node $node, SourceUnit $unit, $filename, $test)
     {
         switch (true) {
             case $node instanceof Param:
@@ -100,7 +100,7 @@ class RefExtractor implements Extractor
         }
 
         if ($ref) {
-            $this->applyGlobal($ref, $node, $filename, $test);
+            $this->applyGlobal($ref, $node, $unit, $filename, $test);
         }
 
         return $ref;
@@ -175,8 +175,11 @@ class RefExtractor implements Extractor
         ];
     }
 
-    protected function applyGlobal(Array &$ref, Node $node, $filename, $test)
+    protected function applyGlobal(Array &$ref, Node $node, SourceUnit $unit, $filename, $test)
     {
+        $ref['DefUnit'] = $unit->getPackageName($ref['DefPath']);
+        $ref['DefUnitType'] = $unit->getType();
+        $ref['DefRepo'] = $unit->getRepository($ref['DefUnit']);
         $ref['File'] = $filename;
         $ref['Start'] = $node->getAttribute('startPos');
         $ref['End'] = $node->getAttribute('endPos');

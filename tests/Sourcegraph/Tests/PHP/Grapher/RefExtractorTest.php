@@ -12,12 +12,36 @@ class RefExtractorTest extends TestCase
      */
     public function testAnalyzer($filename, Array $expected)
     {
+        $expected = $this->setGlobalArgs($expected);
+
         $nodes = $this->loadNodeFixture($filename);
         $unit = $this->getSourceUnitMock();
 
         $extractor = new RefExtractor();
         $result = $extractor->extract($unit, $filename, $nodes);
         $this->assertEquals($result, $expected);
+    }
+
+    public function setGlobalArgs(Array $expected)
+    {
+        $result = [];
+        foreach ($expected as $key => $value) {
+            if (!isset($value['DefUnit'])) {
+                $value['DefUnit'] = null;
+            }
+
+            if (!isset($value['DefUnitType'])) {
+                $value['DefUnitType'] = 'ComposerPackage';
+            }
+
+            if (!isset($value['DefRepo'])) {
+                $value['DefRepo'] = null;
+            }
+
+            $result[] = $value;
+        }
+
+        return $result;
     }
 
     public function provider()
@@ -145,6 +169,49 @@ class RefExtractorTest extends TestCase
                     'End' => 176,
                 ]
             ]],
+            ['105.refs.php', [
+                [
+                    'DefPath' => 'Sourcegraph/PHP/Grapher',
+                    'DefUnit' => 'sourcegraph/srclib-php',
+                    'DefUnitType' => 'ComposerPackage',
+                    'DefRepo' => NULL,
+                    'File' => '105.refs.php',
+                    'Start' => 7,
+                    'End' => 35,
+                ], [
+                    'DefPath' => 'Symfony/Component/Console/Input/InputOption',
+                    'DefUnit' => 'symfony/console',
+                    'DefUnitType' => 'ComposerPackage',
+                    'DefRepo' => 'https://github.com/symfony/console.git',
+                    'File' => '105.refs.php',
+                    'Start' => 36,
+                    'End' => 84,
+                ], [
+                    'DefPath' => 'Sourcegraph/PHP/Grapher',
+                    'DefUnit' => 'sourcegraph/srclib-php',
+                    'DefUnitType' => 'ComposerPackage',
+                    'DefRepo' => NULL,
+                    'File' => '105.refs.php',
+                    'Start' => 99,
+                    'End' => 116,
+                ], [
+                    'DefPath' => 'Symfony/Component/Console/Input/InputOption',
+                    'DefUnit' => 'symfony/console',
+                    'DefUnitType' => 'ComposerPackage',
+                    'DefRepo' => 'https://github.com/symfony/console.git',
+                    'File' => '105.refs.php',
+                    'Start' => 124,
+                    'End' => 153,
+                ], [
+                    'DefPath' => 'Symfony/Component/Console/Input/InputOption',
+                    'DefUnit' => 'symfony/console',
+                    'DefUnitType' => 'ComposerPackage',
+                    'DefRepo' => 'https://github.com/symfony/console.git',
+                    'File' => '105.refs.php',
+                    'Start' => 136,
+                    'End' => 153,
+                ]
+            ]]
         ];
     }
 }

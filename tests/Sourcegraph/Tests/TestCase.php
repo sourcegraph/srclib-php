@@ -2,8 +2,9 @@
 
 namespace Sourcegraph\Tests;
 
-use Sourcegraph\PHP\Grapher;
 use ReflectionMethod;
+use Sourcegraph\PHP\Grapher;
+use Sourcegraph\PHP\SourceUnit\ComposerPackage;
 
 class TestCase extends \PHPUnit_Framework_TestCase
 {
@@ -30,8 +31,8 @@ class TestCase extends \PHPUnit_Framework_TestCase
         return $method->invokeArgs($grapher, [$unit, $filename]);
     }
 
-    public function getSourceUnitMock()
+    public function getSourceUnitMock($path = BASE_PATH)
     {
-        return $this->getMock('Sourcegraph\PHP\SourceUnit');
+        return new ComposerPackage(BASE_PATH);
     }
 }

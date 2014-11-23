@@ -11,7 +11,11 @@ class GrapherTest extends TestCase
     {
         $filename = $this->getFixtureFullPath('500.complex.php');
 
-        $unit = $this->getMock('Sourcegraph\PHP\SourceUnit');
+        $unit = $this->getMock(
+            'Sourcegraph\PHP\SourceUnit',
+            ['getFiles', 'getPackageName', 'getType', 'getRepository']
+        );
+
         $unit->method('getFiles')->willReturn([$filename]);
 
         $grapher = new Grapher(BASE_PATH);

@@ -65,7 +65,7 @@ class ComposerLock extends JsonFile
     public function getPackageName($namespace)
     {
         foreach ($this->namespaces as $ns => $package) {
-            if (strpos($namespace, $ns) !== false) {
+            if (stripos($namespace, $ns) !== false) {
                 return $package['name'];
             }
         }

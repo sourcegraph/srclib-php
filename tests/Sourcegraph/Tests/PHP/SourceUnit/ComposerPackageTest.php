@@ -7,6 +7,12 @@ use Sourcegraph\PHP\SourceUnit\ComposerPackage;
 
 class ComposerPackageTest extends TestCase
 {
+    public function testGetType()
+    {
+        $package = new ComposerPackage(BASE_PATH);
+        $this->assertSame($package->getType(), 'ComposerPackage');
+    }
+
     public function testGetName()
     {
         $package = new ComposerPackage(BASE_PATH);
@@ -20,12 +26,30 @@ class ComposerPackageTest extends TestCase
         $this->assertSame($package->getFiles(), ['src/Monolog/Logger.php']);
     }
 
-    public function testGetPackageName()
+    public function testGetPackageNameInternal()
     {
         $package = new ComposerPackage(BASE_PATH);
         $this->assertSame(
             $package->getPackageName('Symfony\Component\Console\Question'),
             'symfony/console'
+        );
+    }
+
+    public function testGetPackageNameExternal()
+    {
+        $package = new ComposerPackage(BASE_PATH);
+        $this->assertSame(
+            $package->getPackageName('Sourcegraph\PHP\SourceUnit'),
+            'sourcegraph/srclib-php'
+        );
+    }
+
+    public function testGetPackageNameDefPath()
+    {
+        $package = new ComposerPackage(BASE_PATH);
+        $this->assertSame(
+            $package->getPackageName('Sourcegraph/PHP/SourceUnit'),
+            'sourcegraph/srclib-php'
         );
     }
 
