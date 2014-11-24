@@ -1,6 +1,6 @@
 {
     "name": "sourcegraph/srclib-php",
-    "homepage": "http://github.com/mcuadros/php-cayley",
+    "homepage": "https://sourcegraph.com/sourcegraph/srclib-php",
     "description": "srclib-php is a srclib toolchain that performs PHP code analysis.",
     "type": "project",
     "license": "MIT",
