@@ -2,6 +2,7 @@
 
 namespace Sourcegraph\PHP\SourceUnit\ComposerPackage;
 
+use Sourcegraph\PHP\SourceUnit\FileNotFound;
 use RuntimeException;
 
 abstract class JsonFile
@@ -20,7 +21,7 @@ abstract class JsonFile
     {
         $file = $this->path . DIRECTORY_SEPARATOR . $this->file;
         if (!file_exists($file)) {
-            throw new RuntimeException(
+            throw new FileNotFound(
                 'Invalid Package cannot found ' . $this->file . ' file'
             );
         }

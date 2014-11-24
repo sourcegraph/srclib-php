@@ -14,7 +14,7 @@ class ComposerJsonTest extends TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException Sourcegraph\PHP\SourceUnit\FileNotFound
      */
     public function testRead()
     {
@@ -36,6 +36,15 @@ class ComposerJsonTest extends TestCase
             'videlalvaro/php-amqplib',
             'rollbar/rollbar'
         ]);
+    }
+
+    public function testGetRequiredVersion()
+    {
+        $package = new ComposerJson(BASE_PATH);
+        $this->assertSame(
+            $package->getRequiredVersion('symfony/console'),
+            '2.5.*'
+        );
     }
 
     public function testGetNamespacesPSR0()

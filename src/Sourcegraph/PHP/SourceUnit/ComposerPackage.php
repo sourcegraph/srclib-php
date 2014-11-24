@@ -116,6 +116,16 @@ class ComposerPackage implements SourceUnit
         return $this->lock->getRepository($packageName);
     }
 
+    public function getCommit($packageName)
+    {
+        return $this->lock->getCommit($packageName);
+    }
+
+    public function getRequiredVersion($packageName)
+    {
+        return $this->json->getRequiredVersion($packageName);
+    }
+
     public function toArray()
     {
         return [

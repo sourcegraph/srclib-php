@@ -3,12 +3,12 @@
 namespace Sourcegraph\PHP\Command;
 
 use Symfony\Component\Console\Command\Command as BaseCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Sourcegraph\PHP\Scanner;
+use Sourcegraph\PHP\SourceUnit\FileNotFound;
 
 class ScannerCommand extends BaseCommand
 {
@@ -49,6 +49,11 @@ class ScannerCommand extends BaseCommand
         }
 
         $scanner = new Scanner();
-        return $scanner->run($path);
+
+        try {
+            return $scanner->run($path);
+        } catch (FileNotFound $e) {
+            return;
+        }
     }
 }
