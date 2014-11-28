@@ -181,7 +181,7 @@ class RefExtractor implements Extractor
         $ref['DefUnitType'] = $unit->getType();
         $ref['DefRepo'] = $unit->getRepository($ref['DefUnit']);
         $ref['File'] = $filename;
-        $ref['Start'] = $node->getAttribute('startPos');
-        $ref['End'] = $node->getAttribute('endPos');
+        $ref['Start'] = $node->getAttribute('startFilePos');
+        $ref['End'] = $node->getAttribute('endFilePos');
     }
 }

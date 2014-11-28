@@ -40,7 +40,9 @@ class Grapher
 
     protected function setUpParser()
     {
-        $this->parser = new Parser(new Lexer);
+        $this->parser = new Parser(new Lexer([
+            'usedAttributes' => ['comments', 'startFilePos', 'endFilePos']
+        ]));
     }
 
     protected function setUpTraverser()

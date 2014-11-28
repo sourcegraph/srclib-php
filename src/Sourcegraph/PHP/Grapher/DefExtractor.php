@@ -142,8 +142,8 @@ class DefExtractor implements Extractor
     {
         $def['File'] = $filename;
         $def['Test'] = $test;
-        $def['DefStart'] = $node->getAttribute('startPos');
-        $def['DefEnd'] = $node->getAttribute('endPos');
+        $def['DefStart'] = $node->getAttribute('startFilePos');
+        $def['DefEnd'] = $node->getAttribute('endFilePos');
 
         if (!isset($def['Exported'])) {
             $def['Exported'] = true;
