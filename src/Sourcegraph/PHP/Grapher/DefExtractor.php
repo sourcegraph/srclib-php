@@ -65,7 +65,7 @@ class DefExtractor implements Extractor
         return [
             'Kind' => Grapher::KIND_CLASS,
             'Name' => $node->name,
-            'TreePath' => $node->namespacedName->toString('/'),
+            'Path' => $node->namespacedName->toString('/'),
         ];
     }
 
@@ -74,7 +74,7 @@ class DefExtractor implements Extractor
         return [
             'Kind' => Grapher::KIND_TRAIT,
             'Name' => $node->name,
-            'TreePath' => $node->namespacedName->toString('/'),
+            'Path' => $node->namespacedName->toString('/'),
         ];
     }
 
@@ -83,7 +83,7 @@ class DefExtractor implements Extractor
         return [
             'Kind' => Grapher::KIND_INTERFACE,
             'Name' => $node->name,
-            'TreePath' => $node->namespacedName->toString('/'),
+            'Path' => $node->namespacedName->toString('/'),
         ];
     }
 
@@ -93,7 +93,7 @@ class DefExtractor implements Extractor
         return [
             'Kind' => Grapher::KIND_FUNCTION,
             'Name' => $node->name,
-            'TreePath' => $node->namespacedName->toString('/'),
+            'Path' => $node->namespacedName->toString('/'),
         ];
     }
 
@@ -102,7 +102,7 @@ class DefExtractor implements Extractor
         return [
             'Kind' => Grapher::KIND_METHOD,
             'Name' => $node->name,
-            'TreePath' => $node->namespacedName->toString('/'),
+            'Path' => $node->namespacedName->toString('/'),
             'Exported' => $node->isPublic()
         ];
     }
@@ -112,7 +112,7 @@ class DefExtractor implements Extractor
         return [
             'Kind' => Grapher::KIND_PROPERTY,
             'Name' => $node->props[0]->name,
-            'TreePath' => $node->namespacedName->toString('/'),
+            'Path' => $node->namespacedName->toString('/'),
             'Exported' => $node->type == Stmt\Class_::MODIFIER_PUBLIC
         ];
     }
@@ -122,7 +122,7 @@ class DefExtractor implements Extractor
         return [
             'Kind' => Grapher::KIND_CONSTANT,
             'Name' => $node->consts[0]->name,
-            'TreePath' => $node->consts[0]->namespacedName->toString('/'),
+            'Path' => $node->consts[0]->namespacedName->toString('/'),
         ];
     }
 
